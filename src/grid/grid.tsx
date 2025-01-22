@@ -44,9 +44,7 @@ const Grid: React.FC<{ rows: number; cols: number; defaultColor: string }> = ({
         return () => clearInterval(colorTrailIntervalId);
     }, []);
 
-    const [grid, setGrid] = useState<string[][]>(
-        Array.from({ length: rows }, () => Array(cols).fill(defaultColor))
-    );
+    const grid = Array.from({ length: rows }, () => Array(cols).fill(0));
     const [stripes, setStripes] = useState<number[]>([
         cols - 6,
         cols - 5,
@@ -81,9 +79,9 @@ const Grid: React.FC<{ rows: number; cols: number; defaultColor: string }> = ({
                                 ? colorSets[trailColorsIdx][
                                       stripes.findIndex((p) => p === colIndex)
                                   ]
-                                : "black"
+                                : defaultColor
                         }
-                        key={`${rowIndex}-${colIndex}`}
+                        key={`${rowIndex}-${colIndex}-${cell}`}
                         rowIndex={rowIndex}
                         colIndex={colIndex}
                     />

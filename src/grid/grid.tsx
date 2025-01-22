@@ -6,14 +6,43 @@ const Grid: React.FC<{ rows: number; cols: number; defaultColor: string }> = ({
     cols,
     defaultColor,
 }) => {
-    const trailColors = [
-        "rgb(83,248,0)",
-        "rgb(40,212,0)",
-        "rgb(0,165,0)",
-        "rgb(0,120,1)",
-        "rgb(0,85,0)",
-        "rgb(0,43,1)",
-    ]; // Fading trail colors
+    // Predefined sets of trail colors
+    const colorSets = [
+        [
+            "rgb(83,248,0)",
+            "rgb(40,212,0)",
+            "rgb(0,165,0)",
+            "rgb(0,120,1)",
+            "rgb(0,85,0)",
+            "rgb(0,43,1)",
+        ],
+        [
+            "rgb(248,83,0)",
+            "rgb(212,40,0)",
+            "rgb(165,0,0)",
+            "rgb(120,0,1)",
+            "rgb(85,0,0)",
+            "rgb(43,0,1)",
+        ],
+        [
+            "rgb(0,83,248)",
+            "rgb(0,40,212)",
+            "rgb(0,0,165)",
+            "rgb(0,0,120)",
+            "rgb(0,0,85)",
+            "rgb(0,0,43)",
+        ],
+    ];
+    const [trailColorsIdx, setTrailColorsIdx] = useState<number>(0);
+    // const [trailColors, setTrailColors] = useState<string[]>(colorSets[0]);
+
+    useEffect(() => {
+        const colorTrailIntervalId = setInterval(() => {
+            setTrailColorsIdx((p) => (p + 1) % colorSets.length);
+        }, 2000);
+
+        return () => clearInterval(colorTrailIntervalId);
+    }, []);
 
     const [grid, setGrid] = useState<string[][]>(
         Array.from({ length: rows }, () => Array(cols).fill(defaultColor))
@@ -49,7 +78,7 @@ const Grid: React.FC<{ rows: number; cols: number; defaultColor: string }> = ({
                     <Cell
                         color={
                             stripes.includes(colIndex)
-                                ? trailColors[
+                                ? colorSets[trailColorsIdx][
                                       stripes.findIndex((p) => p === colIndex)
                                   ]
                                 : "black"
